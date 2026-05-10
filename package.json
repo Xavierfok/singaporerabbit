@@ -28,6 +28,7 @@
     "typescript": "^5.7.2"
   },
   "devDependencies": {
+    "gray-matter": "^4.0.3",
     "tsx": "^4.19.2"
   }
 }
