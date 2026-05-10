@@ -1,0 +1,28 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  intro?: string;
+  parent?: { name: string; href: string };
+}
+
+const { title, description, intro, parent } = Astro.props;
+const crumbs = [
+  { name: 'home', href: '/' },
+  ...(parent ? [parent] : []),
+  { name: title.toLowerCase(), href: Astro.url.pathname },
+];
+---
+<BaseLayout title={title} description={description}>
+  <Breadcrumb items={crumbs} />
+  <header class="mt-6">
+    <h1 class="font-serif text-3xl">{title}</h1>
+    {intro && <p class="mt-3 text-base text-ink-soft">{intro}</p>}
+  </header>
+  <div class="mt-8">
+    <slot />
+  </div>
+</BaseLayout>

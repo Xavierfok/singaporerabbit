@@ -1,0 +1,75 @@
+---
+import { SITE } from '~/lib/site';
+
+interface Props {
+  type: 'Article' | 'FAQPage' | 'LocalBusiness' | 'BreadcrumbList' | 'Organization' | 'WebSite';
+  data?: Record<string, unknown>;
+}
+
+const { type, data = {} } = Astro.props;
+const url = new URL(Astro.url.pathname, SITE.url).toString();
+
+let json: Record<string, unknown> = { '@context': 'https://schema.org', '@type': type };
+
+if (type === 'Article') {
+  json = {
+    ...json,
+    headline: data.title,
+    description: data.description,
+    datePublished: data.published,
+    dateModified: data.last_updated,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+    author: data.contributor
+      ? { '@type': 'Person', name: data.contributor }
+      : { '@type': 'Organization', name: SITE.publisher.name },
+    publisher: { '@type': 'Organization', name: SITE.publisher.name, url: SITE.url },
+    image: data.hero ? new URL(String(data.hero), SITE.url).toString() : undefined,
+  };
+} else if (type === 'FAQPage') {
+  json = {
+    ...json,
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: data.question,
+        acceptedAnswer: { '@type': 'Answer', text: data.answer },
+      },
+    ],
+  };
+} else if (type === 'LocalBusiness') {
+  json = {
+    ...json,
+    name: data.name,
+    address: { '@type': 'PostalAddress', streetAddress: data.address, addressCountry: 'SG' },
+    geo: { '@type': 'GeoCoordinates', latitude: data.lat, longitude: data.lng },
+    telephone: data.phone,
+    url: data.website ?? url,
+  };
+} else if (type === 'BreadcrumbList') {
+  json = {
+    ...json,
+    itemListElement: (data.items as Array<{ name: string; href: string }>).map((it, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: it.name,
+      item: new URL(it.href, SITE.url).toString(),
+    })),
+  };
+} else if (type === 'Organization') {
+  json = {
+    ...json,
+    name: SITE.publisher.name,
+    url: SITE.url,
+    description: SITE.description,
+  };
+} else if (type === 'WebSite') {
+  json = {
+    ...json,
+    name: SITE.name,
+    url: SITE.url,
+    description: SITE.description,
+    inLanguage: SITE.locale,
+  };
+}
+---
+<script is:inline type="application/ld+json" set:html={JSON.stringify(json, null, 0)} />

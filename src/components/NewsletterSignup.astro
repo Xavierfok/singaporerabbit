@@ -1,0 +1,32 @@
+---
+import { SITE } from '~/lib/site';
+---
+<section class="my-10 rounded-md border border-accent/30 bg-accent-soft px-6 py-6">
+  <h2 class="font-serif text-xl">subscribe to the weekly digest</h2>
+  <p class="mt-2 text-sm text-ink-soft">
+    new SG rabbit care guides, owner faqs, and directory updates. one short email a week. unsubscribe any time.
+  </p>
+  <form
+    action={SITE.newsletter.formAction}
+    method="post"
+    target="popupwindow"
+    class="mt-4 flex flex-col gap-2 sm:flex-row"
+  >
+    <label for="newsletter-email" class="sr-only">email</label>
+    <input
+      id="newsletter-email"
+      type="email"
+      name="email"
+      required
+      placeholder="you@example.com"
+      class="flex-1 rounded border border-ink/20 bg-white px-3 py-2 text-base"
+    />
+    <button
+      type="submit"
+      class="rounded bg-accent px-4 py-2 text-sm font-semibold text-white no-underline hover:opacity-90"
+    >
+      subscribe
+    </button>
+  </form>
+  <p class="mt-2 text-xs text-ink-soft">we use Buttondown. PDPA-compliant. double opt-in.</p>
+</section>

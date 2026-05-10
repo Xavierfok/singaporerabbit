@@ -1,0 +1,48 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import SummaryBlock from '~/components/SummaryBlock.astro';
+import RelatedPosts from '~/components/RelatedPosts.astro';
+import Schema from '~/components/Schema.astro';
+
+interface Props {
+  data: {
+    question: string;
+    answer_summary: string;
+    last_updated: string;
+    published: string;
+    tags: string[];
+  };
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+const crumbs = [
+  { name: 'home', href: '/' },
+  { name: 'owner faq', href: '/faq/' },
+  { name: data.question.toLowerCase(), href: `/faq/${slug}/` },
+];
+---
+<BaseLayout title={data.question} description={data.answer_summary.slice(0, 160)}>
+  <Breadcrumb items={crumbs} />
+  <article class="prose mt-6 max-w-none" data-pagefind-body itemscope itemtype="https://schema.org/Question">
+    <h1 class="font-serif text-3xl" itemprop="name">{data.question}</h1>
+    <p class="mt-2 text-sm text-ink-soft">
+      published {data.published} · last updated {data.last_updated}
+    </p>
+    <SummaryBlock summary={data.answer_summary} lastUpdated={data.last_updated} />
+    <div class="mt-6" itemprop="acceptedAnswer" itemscope itemtype="https://schema.org/Answer">
+      <div itemprop="text">
+        <slot />
+      </div>
+    </div>
+    <footer class="mt-10 border-t border-ink/10 pt-4 text-sm text-ink-soft">
+      <p>
+        themes summarised from public SG owner discussions, never republished verbatim. for medical
+        issues, see a <a href="/vets/">SG rabbit-friendly vet</a>.
+      </p>
+    </footer>
+  </article>
+  <RelatedPosts collection="faq" currentSlug={slug} tags={data.tags} />
+  <Schema type="FAQPage" data={{ question: data.question, answer: data.answer_summary }} />
+</BaseLayout>

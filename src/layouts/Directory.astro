@@ -1,0 +1,83 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import Schema from '~/components/Schema.astro';
+
+interface Props {
+  data: {
+    name: string;
+    type: string;
+    address: string;
+    region: string;
+    phone?: string;
+    website?: string;
+    hours?: Record<string, string>;
+    lat: number;
+    lng: number;
+    sees_rabbits?: boolean;
+    source_url: string;
+    last_verified: string;
+    featured: boolean;
+    summary: string;
+  };
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+const slugTail = slug.split('/').pop() ?? slug;
+const crumbs = [
+  { name: 'home', href: '/' },
+  { name: data.type, href: `/${data.type}/` },
+  { name: data.name.toLowerCase(), href: `/${data.type}/${slugTail}/` },
+];
+---
+<BaseLayout title={data.name} description={data.summary.slice(0, 160)}>
+  <Breadcrumb items={crumbs} />
+  <article
+    class="prose mt-6 max-w-none"
+    data-pagefind-body
+    itemscope
+    itemtype="https://schema.org/LocalBusiness"
+  >
+    <h1 class="font-serif text-3xl" itemprop="name">{data.name}</h1>
+    <p class="mt-2 text-sm text-ink-soft">{data.region} · verified {data.last_verified}</p>
+    <p class="mt-4 text-base">{data.summary}</p>
+
+    <h2 class="mt-8 font-serif text-xl">contact + location</h2>
+    <ul class="mt-2 space-y-1 text-sm">
+      <li itemprop="address">{data.address}</li>
+      {data.phone && <li itemprop="telephone">phone: {data.phone}</li>}
+      {data.website && (
+        <li>
+          website:
+          <a href={data.website} rel="nofollow noopener" target="_blank" itemprop="url">
+            {data.website}
+          </a>
+        </li>
+      )}
+    </ul>
+
+    {data.hours && (
+      <>
+        <h2 class="mt-8 font-serif text-xl">opening hours</h2>
+        <ul class="mt-2 space-y-1 text-sm">
+          {Object.entries(data.hours).map(([d, h]) => (
+            <li><strong class="uppercase">{d}</strong>: {h}</li>
+          ))}
+        </ul>
+      </>
+    )}
+
+    <div class="mt-6">
+      <slot />
+    </div>
+
+    <footer class="mt-10 border-t border-ink/10 pt-4 text-sm text-ink-soft">
+      <p>
+        info verified {data.last_verified}. source: <a href={data.source_url} rel="nofollow noopener" target="_blank">{data.source_url}</a>.
+        spotted something out of date? <a href="/contact/">tell us</a>.
+      </p>
+    </footer>
+  </article>
+  <Schema type="LocalBusiness" data={data} />
+</BaseLayout>

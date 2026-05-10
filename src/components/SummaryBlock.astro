@@ -1,0 +1,14 @@
+---
+interface Props { summary: string; lastUpdated?: string }
+const { summary, lastUpdated } = Astro.props;
+---
+<aside
+  class="rounded-md border border-accent/30 bg-accent-soft px-5 py-4 text-ink"
+  data-pagefind-meta="summary"
+  data-summary
+>
+  <p class="text-base leading-relaxed">{summary}</p>
+  {lastUpdated && (
+    <p class="mt-2 text-xs text-ink-soft">last updated {lastUpdated}</p>
+  )}
+</aside>

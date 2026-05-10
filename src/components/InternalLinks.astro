@@ -1,0 +1,25 @@
+---
+interface Link { href: string; label: string; kind?: 'guide' | 'faq' | 'directory' | 'breed' }
+interface Props { links: Link[]; minRequired?: number }
+const { links, minRequired = 3 } = Astro.props;
+
+if (links.length < minRequired) {
+  // eslint-disable-next-line no-console
+  console.warn(
+    `[internal-links] page ${Astro.url.pathname} has ${links.length} links, minimum is ${minRequired}`
+  );
+}
+---
+<aside class="my-6 rounded border border-ink/10 bg-white px-5 py-4">
+  <h2 class="mb-3 text-sm font-semibold uppercase tracking-wide text-ink-soft">read next</h2>
+  <ul class="grid gap-2 sm:grid-cols-2">
+    {links.map((l) => (
+      <li>
+        <a href={l.href} class="block py-1">
+          {l.kind && <span class="mr-2 text-xs uppercase tracking-wide text-ink-soft">{l.kind}</span>}
+          {l.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</aside>

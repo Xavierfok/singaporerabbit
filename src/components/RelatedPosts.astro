@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+
+interface Props {
+  collection: 'guides' | 'faq';
+  currentSlug: string;
+  tags?: string[];
+  limit?: number;
+}
+
+const { collection, currentSlug, tags = [], limit = 3 } = Astro.props;
+const all = await getCollection(collection, ({ data, slug }) => {
+  if (data.draft) return false;
+  return slug !== currentSlug;
+});
+
+function score(entryTags: string[] = []) {
+  if (!tags.length) return 0;
+  return entryTags.filter((t) => tags.includes(t)).length;
+}
+
+const ranked = all
+  .map((e) => ({ e, s: score(e.data.tags ?? []) }))
+  .sort((a, b) => b.s - a.s || (b.e.data.last_updated ?? '').localeCompare(a.e.data.last_updated ?? ''))
+  .slice(0, limit)
+  .map((x) => x.e);
+---
+{ranked.length > 0 && (
+  <section class="my-8 border-t border-ink/10 pt-6">
+    <h2 class="mb-3 text-sm font-semibold uppercase tracking-wide text-ink-soft">related</h2>
+    <ul class="grid gap-3 sm:grid-cols-3">
+      {ranked.map((e) => (
+        <li class="rounded border border-ink/10 p-3">
+          <a href={`/${collection === 'faq' ? 'faq' : 'care'}/${e.slug}/`} class="font-serif">
+            {collection === 'faq' ? (e.data as any).question : (e.data as any).title}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}

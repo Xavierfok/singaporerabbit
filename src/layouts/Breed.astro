@@ -1,0 +1,52 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import SummaryBlock from '~/components/SummaryBlock.astro';
+import KeyFacts from '~/components/KeyFacts.astro';
+
+interface Props {
+  data: {
+    name: string;
+    alternate_names: string[];
+    origin: string;
+    adult_weight_kg: [number, number];
+    lifespan_years: [number, number];
+    temperament: string[];
+    sg_climate_notes: string;
+    summary: string;
+    last_updated: string;
+    published: string;
+  };
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+const crumbs = [
+  { name: 'home', href: '/' },
+  { name: 'breeds', href: '/breeds/' },
+  { name: data.name.toLowerCase(), href: `/breeds/${slug}/` },
+];
+
+const facts = [
+  { label: 'adult weight', value: `${data.adult_weight_kg[0]}–${data.adult_weight_kg[1]} kg` },
+  { label: 'lifespan', value: `${data.lifespan_years[0]}–${data.lifespan_years[1]} years` },
+  { label: 'origin', value: data.origin },
+  { label: 'temperament', value: data.temperament.join(', ') },
+];
+---
+<BaseLayout title={data.name} description={data.summary.slice(0, 160)}>
+  <Breadcrumb items={crumbs} />
+  <article class="prose mt-6 max-w-none" data-pagefind-body>
+    <h1 class="font-serif text-3xl">{data.name}</h1>
+    {data.alternate_names.length > 0 && (
+      <p class="mt-1 text-sm text-ink-soft">also known as: {data.alternate_names.join(', ')}</p>
+    )}
+    <SummaryBlock summary={data.summary} lastUpdated={data.last_updated} />
+    <KeyFacts facts={facts} />
+    <h2 class="font-serif text-xl">notes for Singapore owners</h2>
+    <p class="mt-2 text-base">{data.sg_climate_notes}</p>
+    <div class="mt-6">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>

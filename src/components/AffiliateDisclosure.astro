@@ -1,0 +1,11 @@
+---
+interface Props { compact?: boolean }
+const { compact = false } = Astro.props;
+---
+<aside class={`rounded border border-ink/10 bg-white text-ink-soft ${compact ? 'px-3 py-2 text-xs' : 'px-5 py-4 text-sm'}`}>
+  <p>
+    some links on this page are affiliate links. if you click through and buy, singapore rabbits may
+    earn a small commission at no cost to you. we only link to products and services we would
+    recommend regardless. see our <a href="/editorial-policy/">editorial policy</a>.
+  </p>
+</aside>

@@ -1,0 +1,58 @@
+---
+import '~/styles/global.css';
+import Header from '~/components/Header.astro';
+import Footer from '~/components/Footer.astro';
+import Schema from '~/components/Schema.astro';
+import { SITE } from '~/lib/site';
+
+interface Props {
+  title: string;
+  description?: string;
+  canonical?: string;
+  ogImage?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = SITE.description,
+  canonical = new URL(Astro.url.pathname, SITE.url).toString(),
+  ogImage = '/og-default.png',
+  noindex = false,
+} = Astro.props;
+
+const fullTitle = title.toLowerCase().includes('singapore rabbits')
+  ? title
+  : `${title} — ${SITE.name}`;
+---
+<!doctype html>
+<html lang="en-SG">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(ogImage, SITE.url).toString()} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content={SITE.locale.replace('-', '_')} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" href="/rss.xml" title={`${SITE.name} rss`} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <Schema type="WebSite" />
+    <Schema type="Organization" />
+  </head>
+  <body class="min-h-screen bg-white text-ink">
+    <Header />
+    <main id="main" class="mx-auto max-w-3xl px-6 py-10">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

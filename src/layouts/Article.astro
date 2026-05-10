@@ -1,0 +1,52 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import SummaryBlock from '~/components/SummaryBlock.astro';
+import RelatedPosts from '~/components/RelatedPosts.astro';
+import AffiliateDisclosure from '~/components/AffiliateDisclosure.astro';
+import Schema from '~/components/Schema.astro';
+
+interface Props {
+  data: {
+    title: string;
+    description: string;
+    summary: string;
+    last_updated: string;
+    published: string;
+    contributor?: { id: string };
+    tags: string[];
+    affiliate_disclosure: boolean;
+  };
+  slug: string;
+}
+
+const { data, slug } = Astro.props;
+const crumbs = [
+  { name: 'home', href: '/' },
+  { name: 'care guides', href: '/care/' },
+  { name: data.title.toLowerCase(), href: `/care/${slug}/` },
+];
+---
+<BaseLayout title={data.title} description={data.description}>
+  <Breadcrumb items={crumbs} />
+  <article class="prose mt-6 max-w-none" data-pagefind-body itemscope itemtype="https://schema.org/Article">
+    <h1 class="font-serif text-3xl" itemprop="headline">{data.title}</h1>
+    <p class="mt-2 text-sm text-ink-soft">
+      published {data.published} · last updated {data.last_updated}
+      {data.contributor && <span> · contributor {data.contributor.id}</span>}
+    </p>
+    <SummaryBlock summary={data.summary} lastUpdated={data.last_updated} />
+    {data.affiliate_disclosure && <AffiliateDisclosure compact={true} />}
+    <div class="mt-6">
+      <slot />
+    </div>
+    <footer class="mt-10 border-t border-ink/10 pt-4 text-sm text-ink-soft">
+      <p>
+        community-sourced information, not veterinary advice. for medical issues, see a licensed
+        SG exotic vet — start with our <a href="/vets/">vet directory</a>.
+      </p>
+    </footer>
+  </article>
+  <RelatedPosts collection="guides" currentSlug={slug} tags={data.tags} />
+  <Schema type="Article" data={{ ...data, contributor: data.contributor?.id }} />
+</BaseLayout>
