@@ -1,0 +1,19 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Directory from '~/layouts/Directory.astro';
+
+export async function getStaticPaths() {
+  const all = await getCollection('directory', ({ data }) => data.type === 'boarding' && !data.draft);
+  return all.map((entry) => ({
+    params: { slug: entry.slug.split('/').pop() ?? entry.slug },
+    props: { entry },
+  }));
+}
+
+interface Props { entry: CollectionEntry<'directory'> }
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+<Directory data={entry.data} slug={entry.slug}>
+  <Content />
+</Directory>

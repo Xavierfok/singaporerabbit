@@ -1,6 +1,9 @@
 import { defineCollection, reference, z } from 'astro:content';
 
-const ISO_DATE = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'use YYYY-MM-DD');
+const ISO_DATE = z
+  .union([z.string(), z.date()])
+  .transform((d) => (typeof d === 'string' ? d : d.toISOString().slice(0, 10)))
+  .pipe(z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'use YYYY-MM-DD'));
 
 const directoryRegions = ['north', 'south', 'east', 'west', 'central'] as const;
 const directoryTypes = ['vets', 'groomers', 'boarding', 'shops', 'rescues', 'breeders'] as const;

@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+import Hub from '~/layouts/Hub.astro';
+
+const breeds = (await getCollection('breeds', ({ data }) => !data.draft))
+  .sort((a, b) => a.data.name.localeCompare(b.data.name));
+---
+<Hub
+  title="rabbit breeds in Singapore"
+  description="the most common rabbit breeds owned in Singapore — Holland Lop, Netherland Dwarf, Lionhead, Mini Rex, Mini Lop."
+  intro="breed deep-dives with weight, lifespan, temperament, and SG-climate notes (humidity, AC requirements)."
+>
+  {breeds.length === 0 ? (
+    <p class="text-sm text-ink-soft">5 breed pages going live in cornerstone burst (month 1).</p>
+  ) : (
+    <ul class="grid gap-4 sm:grid-cols-2">
+      {breeds.map((b) => (
+        <li class="rounded border border-ink/10 p-4">
+          <a href={`/breeds/${b.slug}/`} class="font-serif text-lg">{b.data.name}</a>
+          <p class="mt-1 text-xs text-ink-soft">{b.data.alternate_names.join(', ')}</p>
+          <p class="mt-2 text-sm">{b.data.summary.slice(0, 160)}</p>
+        </li>
+      ))}
+    </ul>
+  )}
+</Hub>

@@ -1,0 +1,16 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import FAQ from '~/layouts/FAQ.astro';
+
+export async function getStaticPaths() {
+  const all = await getCollection('faq', ({ data }) => !data.draft);
+  return all.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
+}
+
+interface Props { entry: CollectionEntry<'faq'> }
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+<FAQ data={entry.data} slug={entry.slug}>
+  <Content />
+</FAQ>

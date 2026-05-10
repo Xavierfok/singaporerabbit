@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+import Hub from '~/layouts/Hub.astro';
+
+const faqs = (await getCollection('faq', ({ data }) => !data.draft))
+  .sort((a, b) => (b.data.last_updated ?? '').localeCompare(a.data.last_updated ?? ''));
+---
+<Hub
+  title="owner faq"
+  description="the long-tail questions Singapore rabbit owners actually ask, summarised."
+  intro="themes from public SG owner discussions. never republished verbatim, always rewritten in plain prose with attribution to 'owners commonly ask'."
+>
+  {faqs.length === 0 ? (
+    <p class="text-sm text-ink-soft">faqs going live alongside the cornerstone burst.</p>
+  ) : (
+    <ul class="grid gap-3">
+      {faqs.map((f) => (
+        <li class="rounded border border-ink/10 p-4">
+          <a href={`/faq/${f.slug}/`} class="font-serif">{f.data.question}</a>
+          <p class="mt-1 text-xs text-ink-soft">updated {f.data.last_updated}</p>
+        </li>
+      ))}
+    </ul>
+  )}
+</Hub>

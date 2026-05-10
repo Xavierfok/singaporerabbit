@@ -1,18 +1,71 @@
 ---
-import '~/styles/global.css';
+import { getCollection } from 'astro:content';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import NewsletterSignup from '~/components/NewsletterSignup.astro';
+import { SITE } from '~/lib/site';
+
+const guides = (await getCollection('guides', ({ data }) => !data.draft))
+  .sort((a, b) => (b.data.last_updated ?? '').localeCompare(a.data.last_updated ?? ''))
+  .slice(0, 6);
 ---
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>singapore rabbits — what local owners actually ask, answered</title>
-    <meta name="description" content="community digest and curator for Singapore rabbit owners. Care guides, owner faq, and a directory of SG rabbit-friendly vets, groomers, and shops." />
-  </head>
-  <body class="min-h-screen">
-    <main class="mx-auto max-w-3xl px-6 py-16">
-      <h1 class="text-4xl font-serif">singapore rabbits</h1>
-      <p class="mt-4 text-ink-soft">scaffold up. real homepage coming in M3.</p>
-    </main>
-  </body>
-</html>
+<BaseLayout title={SITE.name} description={SITE.description}>
+  <section class="border-b border-ink/10 pb-10">
+    <p class="text-sm uppercase tracking-wide text-ink-soft">singapore rabbits</p>
+    <h1 class="mt-2 font-serif text-4xl">{SITE.tagline}</h1>
+    <p class="mt-4 max-w-2xl text-base text-ink-soft">
+      a community digest, not a vet. care guides written for SG humidity and HDB life, owner faqs
+      mined from the questions local owners actually ask, and a directory of vets, groomers, shops,
+      and rescues that see rabbits — verified, dated, and free.
+    </p>
+  </section>
+
+  <section class="mt-10 grid gap-6 sm:grid-cols-3">
+    <a href="/care/" class="rounded border border-ink/10 p-5 no-underline hover:border-accent">
+      <p class="text-xs uppercase tracking-wide text-accent">pillar 1</p>
+      <h2 class="mt-1 font-serif text-xl">care guides</h2>
+      <p class="mt-2 text-sm text-ink-soft">
+        feeding, hay, housing, heat-stroke prevention, grooming. SG-climate-specific.
+      </p>
+    </a>
+    <a href="/faq/" class="rounded border border-ink/10 p-5 no-underline hover:border-accent">
+      <p class="text-xs uppercase tracking-wide text-accent">pillar 2</p>
+      <h2 class="mt-1 font-serif text-xl">owner faq</h2>
+      <p class="mt-2 text-sm text-ink-soft">
+        the long-tail questions SG rabbit owners post in groups every week, summarised.
+      </p>
+    </a>
+    <a href="/vets/" class="rounded border border-ink/10 p-5 no-underline hover:border-accent">
+      <p class="text-xs uppercase tracking-wide text-accent">pillar 3</p>
+      <h2 class="mt-1 font-serif text-xl">SG directory</h2>
+      <p class="mt-2 text-sm text-ink-soft">
+        vets, groomers, boarding, shops, rescues. address, phone, hours, last verified.
+      </p>
+    </a>
+  </section>
+
+  {guides.length > 0 && (
+    <section class="mt-12">
+      <h2 class="font-serif text-2xl">latest guides</h2>
+      <ul class="mt-4 grid gap-3 sm:grid-cols-2">
+        {guides.map((g) => (
+          <li class="rounded border border-ink/10 p-4">
+            <a href={`/care/${g.slug}/`} class="font-serif">{g.data.title}</a>
+            <p class="mt-1 text-xs text-ink-soft">updated {g.data.last_updated}</p>
+            <p class="mt-2 text-sm">{g.data.description}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <NewsletterSignup />
+
+  <section class="mt-10 rounded border border-ink/10 bg-white px-5 py-4 text-sm text-ink-soft">
+    <p>
+      <strong class="text-ink">editorial promise:</strong> every health post links to a real SG vet,
+      never gives diagnostic advice. owner stories are themes, not republished posts. photos are
+      ours, our contributors', or licensed.
+      <a href="/editorial-policy/">read the editorial policy</a>.
+    </p>
+  </section>
+</BaseLayout>

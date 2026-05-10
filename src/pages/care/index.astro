@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+import Hub from '~/layouts/Hub.astro';
+
+const guides = (await getCollection('guides', ({ data }) => !data.draft))
+  .sort((a, b) => (b.data.last_updated ?? '').localeCompare(a.data.last_updated ?? ''));
+---
+<Hub
+  title="care guides"
+  description="singapore-specific rabbit care guides. feeding, hay, housing, heat-stroke prevention, grooming, vet visits."
+  intro="every guide is owner-tested and links to a SG vet directory entry. medical advice always defers to a licensed exotic vet."
+>
+  {guides.length === 0 ? (
+    <p class="text-sm text-ink-soft">guides going live in cornerstone burst (month 1, 25 articles).</p>
+  ) : (
+    <ul class="grid gap-4 sm:grid-cols-2">
+      {guides.map((g) => (
+        <li class="rounded border border-ink/10 p-4">
+          <a href={`/care/${g.slug}/`} class="font-serif text-lg">{g.data.title}</a>
+          <p class="mt-1 text-xs text-ink-soft">updated {g.data.last_updated}</p>
+          <p class="mt-2 text-sm">{g.data.description}</p>
+        </li>
+      ))}
+    </ul>
+  )}
+</Hub>

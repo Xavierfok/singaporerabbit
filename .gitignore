@@ -27,3 +27,8 @@ yarn-error.log*
 
 # pagefind output (rebuilt on every build)
 public/pagefind/
+
+# fb_scrape — session cookies + scraped images stay local
+fb_scrape/.auth/
+fb_scrape/**/images/
+fb_scrape/logs/

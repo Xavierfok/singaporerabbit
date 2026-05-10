@@ -1,0 +1,19 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Hub from '~/layouts/Hub.astro';
+
+export async function getStaticPaths() {
+  const all = await getCollection('policy');
+  return all.map((entry) => ({ params: { policy: entry.slug }, props: { entry } }));
+}
+
+interface Props { entry: CollectionEntry<'policy'> }
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+<Hub title={entry.data.title} description={entry.data.description}>
+  <article class="prose mt-2 max-w-none" data-pagefind-body>
+    <p class="text-xs text-ink-soft">last updated {entry.data.last_updated}</p>
+    <Content />
+  </article>
+</Hub>

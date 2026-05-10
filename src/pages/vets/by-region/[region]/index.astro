@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import Hub from '~/layouts/Hub.astro';
+import DirectoryCard from '~/components/DirectoryCard.astro';
+import { SG_REGIONS } from '~/lib/site';
+
+export function getStaticPaths() {
+  return SG_REGIONS.map((region) => ({ params: { region } }));
+}
+
+const { region } = Astro.params;
+const all = await getCollection(
+  'directory',
+  ({ data }) => data.type === 'vets' && data.region === region && !data.draft
+);
+---
+<Hub
+  title={`vets in ${region} singapore`}
+  description={`Singapore vet clinics in the ${region} region that see rabbits.`}
+  parent={{ name: 'vets', href: '/vets/' }}
+>
+  {all.length === 0 ? (
+    <p class="mt-4 text-sm text-ink-soft">
+      no listings yet for this region. <a href="/vets/">see all vets</a> or <a href="/contact/">submit one</a>.
+    </p>
+  ) : (
+    <div class="mt-4 grid gap-4 sm:grid-cols-2">
+      {all.map((e) => <DirectoryCard entry={e} />)}
+    </div>
+  )}
+</Hub>

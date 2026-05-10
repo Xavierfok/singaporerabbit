@@ -1,0 +1,7 @@
+# type,url,slug
+page,https://www.facebook.com/FlemishGiantRabbit,flemishgiantrabbit
+page,https://www.facebook.com/profile.php?id=100063571689041,profile_100063571689041
+page,https://www.facebook.com/FHRSS,fhrss
+group,https://www.facebook.com/groups/400847656686206/,group_400847656686206
+group,https://www.facebook.com/groups/singaporerabbitlovers/,singaporerabbitlovers
+group,https://www.facebook.com/groups/BunnyWonderlandSg/,bunnywonderlandsg
