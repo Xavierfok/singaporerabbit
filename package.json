@@ -1,0 +1,33 @@
+{
+  "name": "singaporerabbits",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "singaporerabbits.com — community digest + curator for SG rabbit owners",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build && pagefind --site dist",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check",
+    "check:directory": "tsx scripts/validate-directory.ts",
+    "brief": "tsx scripts/weekly-brief.ts",
+    "indexnow": "tsx scripts/indexnow-ping.ts"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/mdx": "^4.0.3",
+    "@astrojs/rss": "^4.0.10",
+    "@astrojs/sitemap": "^3.2.1",
+    "@astrojs/tailwind": "^6.0.0",
+    "astro": "^5.1.0",
+    "astro-pagefind": "^1.8.3",
+    "pagefind": "^1.3.0",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.2"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2"
+  }
+}

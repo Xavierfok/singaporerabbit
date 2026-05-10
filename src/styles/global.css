@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply bg-white text-ink;
+    font-feature-settings: 'kern', 'liga', 'calt';
+  }
+  body {
+    @apply font-sans antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply font-serif tracking-tight;
+  }
+  a {
+    @apply text-accent underline underline-offset-2 hover:no-underline;
+  }
+}
