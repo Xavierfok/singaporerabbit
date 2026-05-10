@@ -10,9 +10,9 @@
  * env:
  *   INDEXNOW_KEY      — required, the random key string we host at /<key>.txt
  *   INDEXNOW_KEY_LOC  — optional, override the key file URL (default: site root)
- *   SITE_URL          — defaults to https://singaporerabbits.com
+ *   SITE_URL          — defaults to https://singaporerabbit.com
  */
-const SITE_URL = process.env.SITE_URL ?? 'https://singaporerabbits.com';
+const SITE_URL = process.env.SITE_URL ?? 'https://singaporerabbit.com';
 const KEY = process.env.INDEXNOW_KEY;
 const KEY_LOC = process.env.INDEXNOW_KEY_LOC ?? `${SITE_URL}/${KEY}.txt`;
 

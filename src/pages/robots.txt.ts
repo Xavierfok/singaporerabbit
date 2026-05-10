@@ -3,7 +3,7 @@ import { SITE } from '~/lib/site';
 
 export const GET: APIRoute = () => {
   const lines = [
-    '# singaporerabbits.com — community digest, AI-citation friendly',
+    '# singaporerabbit.com — community digest, AI-citation friendly',
     '',
     'User-agent: *',
     'Allow: /',

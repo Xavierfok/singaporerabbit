@@ -1,6 +1,6 @@
 export const SITE = {
   name: 'singapore rabbits',
-  url: 'https://singaporerabbits.com',
+  url: 'https://singaporerabbit.com',
   tagline: 'what local owners actually ask, answered',
   description:
     'community digest and curator for Singapore rabbit owners. Care guides, owner faq, and a directory of SG rabbit-friendly vets, groomers, and shops.',

@@ -1,4 +1,4 @@
-# singaporerabbits.com
+# singaporerabbit.com
 
 community digest + curator for Singapore rabbit owners. Astro 5 static site, markdown-first, no
 WordPress. strategy + roadmap live in [PLAN.md](./PLAN.md).
@@ -144,7 +144,7 @@ vercel build command: `npm run build`. output dir: `dist/`. install command: `np
 |---|---|---|
 | `INDEXNOW_KEY` | scripts/indexnow-ping.ts | post-deploy ping |
 | `INDEXNOW_KEY_LOC` | scripts/indexnow-ping.ts | only if key file isn't at site root |
-| `SITE_URL` | scripts/indexnow-ping.ts | only if site differs from singaporerabbits.com |
+| `SITE_URL` | scripts/indexnow-ping.ts | only if site differs from singaporerabbit.com |
 
 (no env vars needed for build itself.)
 
@@ -164,7 +164,7 @@ vercel build command: `npm run build`. output dir: `dist/`. install command: `np
 
 ## known follow-ups (handed off, not in this scaffold)
 
-- register `singaporerabbits.com` at Cloudflare Registrar
+- register `singaporerabbit.com` at Cloudflare Registrar
 - connect vercel project to GitHub
 - cloudflare DNS (A/AAAA → vercel, CNAME for www)
 - google analytics 4 + google search console + plausible

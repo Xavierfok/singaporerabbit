@@ -5,7 +5,7 @@ import mdx from '@astrojs/mdx';
 import pagefind from 'astro-pagefind';
 
 export default defineConfig({
-  site: 'https://singaporerabbits.com',
+  site: 'https://singaporerabbit.com',
   trailingSlash: 'always',
   build: {
     format: 'directory',

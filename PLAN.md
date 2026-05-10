@@ -1,4 +1,4 @@
-# singaporerabbits.com — long-term SEO build plan
+# singaporerabbit.com — long-term SEO build plan
 
 ## Context
 
@@ -41,7 +41,7 @@ Brand: **"Singapore Rabbits — what local owners actually ask, answered."**
 ## Site architecture
 
 ```
-singaporerabbits.com/
+singaporerabbit.com/
 ├── /                              # Hero + 3 pillar links + latest 6 posts + newsletter signup
 ├── /care/                         # Care guides hub
 │   ├── /care/feeding-singapore-climate/
@@ -164,7 +164,7 @@ singaporerabbits/
 ## Phase plan
 
 **Phase 0 — pre-launch (week 1, ~10 hr)**
-- Register `singaporerabbits.com` (Cloudflare Registrar, ~$10/yr).
+- Register `singaporerabbit.com` (Cloudflare Registrar, ~$10/yr).
 - Init GitHub repo, scaffold Astro project from this plan's file tree.
 - Pick 25 cornerstone topics (Codex generates from r/Rabbits + SG forum keyword research).
 - Write `editorial-policy.md`, `disclaimer.md`, `about.md`, `contact.md`.
