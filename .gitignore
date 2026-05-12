@@ -31,3 +31,4 @@ public/pagefind/
 # research artifacts — kept local, never committed (FB ToS + repo size)
 fb_scrape/
 competitor_scrape/
+research_scrape/

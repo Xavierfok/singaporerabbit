@@ -2,6 +2,8 @@ import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { SITE } from '~/lib/site';
 
+export const prerender = true;
+
 export const GET: APIRoute = async () => {
   const guides = await getCollection('guides', ({ data }) => !data.draft);
   const faqs = await getCollection('faq', ({ data }) => !data.draft);

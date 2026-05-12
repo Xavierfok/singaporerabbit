@@ -1,0 +1,41 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+
+export async function getStaticPaths() {
+  const contributors = await getCollection('contributors', ({ data }) => !data.retired);
+  return contributors.map((c) => ({ params: { slug: c.slug } }));
+}
+
+const { slug } = Astro.params;
+const entry = await getEntry('contributors', slug as string);
+if (!entry) {
+  return Astro.redirect('/contributors/');
+}
+const { Content } = await entry.render();
+const data = entry.data;
+const crumbs = [
+  { name: 'home', href: '/' },
+  { name: 'contributors', href: '/contributors/' },
+  { name: data.name.toLowerCase(), href: `/contributors/${slug}/` },
+];
+---
+<BaseLayout title={data.name} description={data.bio.slice(0, 160)}>
+  <Breadcrumb items={crumbs} />
+  <article class="prose mt-6 max-w-none" itemscope itemtype="https://schema.org/Person">
+    <h1 class="font-serif text-3xl" itemprop="name">{data.name}</h1>
+    <p class="mt-2 text-sm text-ink-soft">contributing since {data.joined}</p>
+    <p class="mt-4 text-base" itemprop="description">{data.bio}</p>
+    {data.social && (
+      <ul class="mt-4 flex flex-wrap gap-3 text-sm">
+        {data.social.instagram && <li>instagram: {data.social.instagram}</li>}
+        {data.social.twitter && <li>x: {data.social.twitter}</li>}
+        {data.social.website && <li><a href={data.social.website} itemprop="url">website</a></li>}
+      </ul>
+    )}
+    <div class="mt-6">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

@@ -26,15 +26,31 @@ const crumbs = [
   { name: 'care guides', href: '/care/' },
   { name: data.title.toLowerCase(), href: `/care/${slug}/` },
 ];
+
+const authorLabel = data.contributor?.id ? data.contributor.id.replace(/-/g, ' ') : 'singapore rabbits team';
+const authorHref = data.contributor?.id ? `/contributors/${data.contributor.id}/` : '/about/';
+
+const updatedDate = new Date(data.last_updated);
+const updatedLabel = updatedDate.toLocaleDateString('en-SG', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
 ---
 <BaseLayout title={data.title} description={data.description}>
   <Breadcrumb items={crumbs} />
   <article class="prose mt-6 max-w-none" data-pagefind-body itemscope itemtype="https://schema.org/Article">
     <h1 class="font-serif text-3xl" itemprop="headline">{data.title}</h1>
-    <p class="mt-2 text-sm text-ink-soft">
-      published {data.published} · last updated {data.last_updated}
-      {data.contributor && <span> · contributor {data.contributor.id}</span>}
-    </p>
+    <div class="mt-3 flex flex-wrap items-center gap-3 text-sm text-ink-soft">
+      <span class="rounded bg-accent-soft px-2 py-0.5 text-xs font-semibold text-accent">
+        updated {updatedLabel}
+      </span>
+      <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+        by <a href={authorHref} itemprop="url"><span itemprop="name">{authorLabel}</span></a>
+      </span>
+      <meta itemprop="datePublished" content={data.published} />
+      <meta itemprop="dateModified" content={data.last_updated} />
+    </div>
     <SummaryBlock summary={data.summary} lastUpdated={data.last_updated} />
     {data.affiliate_disclosure && <AffiliateDisclosure compact={true} />}
     <div class="mt-6">

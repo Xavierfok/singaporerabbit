@@ -1,6 +1,8 @@
 import type { APIRoute } from 'astro';
 import { SITE } from '~/lib/site';
 
+export const prerender = true;
+
 export const GET: APIRoute = () => {
   const lines = [
     '# singaporerabbit.com — community digest, AI-citation friendly',

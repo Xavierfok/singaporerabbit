@@ -42,11 +42,15 @@ const fullTitle = title.toLowerCase().includes('singapore rabbits')
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:locale" content={SITE.locale.replace('-', '_')} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(ogImage, SITE.url).toString()} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate" type="application/rss+xml" href="/rss.xml" title={`${SITE.name} rss`} />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <Schema type="WebSite" />
     <Schema type="Organization" />
+    <script defer is:inline data-domain="singaporerabbit.com" src="https://plausible.io/js/script.js"></script>
   </head>
   <body class="min-h-screen bg-white text-ink">
     <Header />

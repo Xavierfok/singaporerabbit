@@ -1,9 +1,112 @@
 ---
-import DirectoryHub from '~/components/DirectoryHub.astro';
+import { getCollection } from 'astro:content';
+import Hub from '~/layouts/Hub.astro';
+import DirectoryCard from '~/components/DirectoryCard.astro';
+
+const title = 'rabbit breeders in Singapore';
+const description = 'why we do not list commercial rabbit breeders in Singapore, what the law allows, and where SG owners actually find their rabbits.';
+const intro = 'short version: Singapore does not have ethical commercial rabbit breeders worth listing. we explain why, and where to go instead.';
+
+const all = await getCollection('directory', ({ data }) => data.type === 'breeders' && !data.draft);
 ---
-<DirectoryHub
-  type="breeders"
-  title="rabbit breeders in Singapore"
-  description="SG-registered rabbit breeders. listed with caveats — we recommend rescues first."
-  intro="we list breeders for transparency, but adoption first. read our editorial policy on breed sourcing."
-/>
+<Hub title={title} description={description} intro={intro}>
+  <section class="prose mt-2 max-w-none">
+    <h2>our position</h2>
+    <p>
+      we do not list commercial rabbit breeders in Singapore. this is a
+      deliberate editorial choice, not an oversight. here is the reasoning, so
+      you can decide whether you agree.
+    </p>
+
+    <h2>what the law allows in SG</h2>
+    <p>
+      under the <a href="https://www.nparks.gov.sg/avs" rel="noopener" target="_blank">Animal &amp; Veterinary Service (AVS)</a>,
+      pet shops can legally sell rabbits with a valid licence. there is no
+      separate licensing category for hobbyist or backyard rabbit breeding. the
+      rabbits sold in SG pet shops are typically imported from overseas
+      farms or bred locally in unlicensed backyard setups. neither pathway
+      has the welfare oversight that responsible breeding requires —
+      health screening of parents, lineage records, socialisation protocols,
+      lifetime return policies.
+    </p>
+
+    <h2>what the SG rabbit community says</h2>
+    <p>
+      every active SG rabbit rescue — <a href="/rescues/the-stray-wabbit/">The Stray Wabbit</a>,
+      <a href="/rescues/house-rabbit-society-singapore-hrss/">House Rabbit Society Singapore</a>,
+      <a href="/rescues/bunny-wonderland-sg/">Bunny Wonderland</a>, and
+      <a href="/rescues/spca-singapore/">SPCA Singapore</a> — handles
+      pet-shop and breeder surrender cases regularly. the typical pattern is
+      a rabbit bought on impulse, surrendered within 6-18 months once the
+      owner discovers the work involved. promoting more buying makes that
+      cycle worse.
+    </p>
+
+    <h2>where SG owners actually find their rabbit</h2>
+    <ol>
+      <li>
+        <strong>adopt from a rescue.</strong> SG rescues have rabbits of every
+        breed, age, and personality. they spay/neuter before adoption, give a
+        rough age and known health history, and offer ongoing support.
+        see the <a href="/rescues/">rescue directory</a>.
+      </li>
+      <li>
+        <strong>foster first.</strong> if you are unsure rabbits suit your life,
+        most SG rescues run foster programmes. you take care of a rabbit for
+        weeks, decide if you want to adopt, and the rescue covers vet costs.
+      </li>
+      <li>
+        <strong>community rehoming.</strong> SG rabbit Facebook groups and
+        Telegram channels constantly have owners rehoming for migration or
+        family changes. these rabbits are usually already neutered, litter
+        trained, and come with their setup.
+      </li>
+    </ol>
+
+    <h2>if you still want to buy a rabbit from a pet shop</h2>
+    <p>
+      that is your decision and we will not gatekeep. before you do, please
+      read <a href="/care/adopt-vs-buy/">adopt vs buy — SG rescues vs breeders honestly compared</a>
+      and <a href="/care/cost-of-owning-rabbit-singapore/">the actual cost of
+      owning a rabbit in Singapore</a>. ask the pet shop:
+    </p>
+    <ul>
+      <li>what farm or breeder did this rabbit come from?</li>
+      <li>has the rabbit been health-checked by a vet, and which one?</li>
+      <li>what is your return policy if the rabbit develops a health issue in the first 30 days?</li>
+      <li>what is the rabbit's date of birth, not just the import date?</li>
+    </ul>
+    <p>
+      if any of those answers is vague, the shop has not done its homework.
+      walk away.
+    </p>
+
+    {all.length > 0 && (
+      <>
+        <h2>directly listed (with caveats)</h2>
+        <p>
+          if a SG breeder or seller meets every welfare criterion above, we list
+          them here with full caveats. all listings include lineage records,
+          health-screening evidence, and a lifetime return policy.
+        </p>
+        <div class="mt-3 grid gap-4 sm:grid-cols-2">
+          {all.map((e) => <DirectoryCard entry={e} />)}
+        </div>
+      </>
+    )}
+
+    <h2>related reading</h2>
+    <ul>
+      <li><a href="/care/adopt-vs-buy/">adopt vs buy — SG rescues vs breeders honestly compared</a></li>
+      <li><a href="/care/cost-of-owning-rabbit-singapore/">cost of owning a rabbit in Singapore</a></li>
+      <li><a href="/care/first-week-with-new-rabbit-singapore/">first week with a new rabbit in SG</a></li>
+      <li><a href="/rescues/">rescue directory</a></li>
+    </ul>
+
+    <p class="mt-8 text-sm text-ink-soft">
+      know a SG rabbit breeder who meets every welfare criterion above and
+      is willing to share lineage, health records, and a written return
+      policy publicly? <a href="/contact/">tell us</a> and we will verify.
+    </p>
+  </section>
+</Hub>

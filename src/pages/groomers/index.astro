@@ -1,9 +1,115 @@
 ---
-import DirectoryHub from '~/components/DirectoryHub.astro';
+import { getCollection } from 'astro:content';
+import Hub from '~/layouts/Hub.astro';
+import DirectoryCard from '~/components/DirectoryCard.astro';
+import { SG_REGIONS } from '~/lib/site';
+
+const title = 'rabbit groomers in Singapore';
+const description = 'how to find a Singapore groomer who handles rabbits, what services to ask for, and the listings we have verified so far.';
+const intro = 'most dog and cat groomers in SG decline rabbits. the ones who do take them need to know rabbit handling — wrong technique can break a spine.';
+
+const all = await getCollection('directory', ({ data }) => data.type === 'groomers' && !data.draft);
+const featured = all.filter((e) => e.data.featured);
+const others = all.filter((e) => !e.data.featured);
 ---
-<DirectoryHub
-  type="groomers"
-  title="rabbit groomers in Singapore"
-  description="exotic-pet groomers in Singapore who handle rabbits. nail trims, scent gland cleaning, sanitary trims."
-  intro="not every dog groomer takes rabbits. these do, with the right experience."
-/>
+<Hub title={title} description={description} intro={intro}>
+  {all.length > 0 && (
+    <section class="mb-8">
+      <h2 class="font-serif text-xl">browse by region</h2>
+      <ul class="mt-3 flex flex-wrap gap-2 text-sm">
+        {SG_REGIONS.map((r) => (
+          <li>
+            <a href={`/groomers/by-region/${r}/`} class="rounded border border-ink/10 px-3 py-1 no-underline hover:border-accent">{r}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  {featured.length > 0 && (
+    <section class="mb-8">
+      <h2 class="font-serif text-xl">featured</h2>
+      <div class="mt-3 grid gap-4 sm:grid-cols-2">
+        {featured.map((e) => <DirectoryCard entry={e} />)}
+      </div>
+    </section>
+  )}
+
+  {others.length > 0 && (
+    <section class="mb-10">
+      <h2 class="font-serif text-xl">all listings</h2>
+      <div class="mt-3 grid gap-4 sm:grid-cols-2">
+        {others.map((e) => <DirectoryCard entry={e} />)}
+      </div>
+    </section>
+  )}
+
+  <section class="prose mt-10 max-w-none">
+    <h2>what to look for in a SG rabbit groomer</h2>
+    <p>
+      a rabbit groomer is not a dog groomer with a smaller table. rabbits panic
+      when held wrong, and a panicking rabbit can break its own back kicking off
+      a slippery surface. before you book anyone, ask these five questions.
+    </p>
+    <ol>
+      <li>
+        <strong>do they handle rabbits weekly?</strong> not "yes we take them" —
+        ask for the rough number of rabbit appointments per week. one a month is
+        a hobby. one a week is competence.
+      </li>
+      <li>
+        <strong>do they use a non-slip surface?</strong> rubber mat, vetbed, or
+        a towel taped down. polished tables are how spines break.
+      </li>
+      <li>
+        <strong>do they do scent gland cleaning?</strong> a yes here is the
+        single best filter for whether they actually know rabbits. ungroomed
+        scent glands cause odour and skin irritation that owners blame on
+        litter or diet.
+      </li>
+      <li>
+        <strong>do they refuse unwell rabbits?</strong> the correct answer is
+        yes. a competent groomer turns away rabbits with gut sounds off,
+        eye discharge, or recent surgery and tells you to see a vet first.
+      </li>
+      <li>
+        <strong>will they trim back nails too?</strong> some only do front. back
+        nails grow longer in SG because rabbits indoors on tile do not wear
+        them down naturally.
+      </li>
+    </ol>
+
+    <h2>services worth paying for</h2>
+    <ul>
+      <li><strong>nail trim</strong> — every 4-6 weeks for indoor SG rabbits.</li>
+      <li><strong>scent gland cleaning</strong> — every 2-3 months.</li>
+      <li><strong>sanitary trim</strong> — long-haired breeds (Lionhead, Holland Lop, Angora) need this around the bum and back legs to prevent urine staining and flystrike risk.</li>
+      <li><strong>brush-out</strong> — moulting rabbits in SG humidity ingest matted fur, which is one path into <a href="/care/gi-stasis-rabbit-singapore/">GI stasis</a>.</li>
+    </ul>
+
+    <h2>what to skip</h2>
+    <p>
+      full baths are usually unnecessary and risky — rabbits can go into shock
+      from wet fur and they self-clean. spa packages with shampoos, perfumes,
+      and dryers are designed for dogs, not rabbits. if a groomer pushes these
+      as standard, find another one.
+    </p>
+
+    <h2>can't find one near you?</h2>
+    <p>
+      most SG vets that see rabbits will do a nail trim and basic check during
+      a regular visit — see the <a href="/vets/">vet directory</a>. for in-home
+      grooming and learning to trim your rabbit's nails yourself, read
+      <a href="/faq/how-to-trim-rabbit-nails/">how to trim rabbit nails</a> and
+      <a href="/care/grooming-rabbit-singapore/">grooming a rabbit in Singapore</a>.
+    </p>
+
+    <h2>know a SG groomer who handles rabbits well?</h2>
+    <p>
+      we list groomers only after we have confirmed they accept rabbits,
+      handle them safely, and have a verifiable address or website. submit a
+      recommendation via the <a href="/contact/">contact page</a> and we will
+      add them once verified.
+    </p>
+  </section>
+</Hub>
