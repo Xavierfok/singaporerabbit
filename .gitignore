@@ -28,6 +28,11 @@ yarn-error.log*
 # pagefind output (rebuilt on every build)
 public/pagefind/
 
+# cron logs + factory dry-run output
+.logs/
+scripts/factory/logs/
+scripts/factory/.factory-out/
+
 # research artifacts — kept local, never committed (FB ToS + repo size)
 fb_scrape/
 competitor_scrape/
