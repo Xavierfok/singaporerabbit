@@ -32,6 +32,8 @@ public/pagefind/
 .logs/
 scripts/factory/logs/
 scripts/factory/.factory-out/
+__pycache__/
+*.pyc
 
 # research artifacts — kept local, never committed (FB ToS + repo size)
 fb_scrape/
