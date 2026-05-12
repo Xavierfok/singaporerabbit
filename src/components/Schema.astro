@@ -2,7 +2,7 @@
 import { SITE } from '~/lib/site';
 
 interface Props {
-  type: 'Article' | 'FAQPage' | 'LocalBusiness' | 'BreadcrumbList' | 'Organization' | 'WebSite';
+  type: 'Article' | 'HowTo' | 'FAQPage' | 'LocalBusiness' | 'BreadcrumbList' | 'Organization' | 'WebSite';
   data?: Record<string, unknown>;
 }
 
@@ -24,6 +24,28 @@ if (type === 'Article') {
       : { '@type': 'Organization', name: SITE.publisher.name },
     publisher: { '@type': 'Organization', name: SITE.publisher.name, url: SITE.url },
     image: data.hero ? new URL(String(data.hero), SITE.url).toString() : undefined,
+  };
+} else if (type === 'HowTo') {
+  json = {
+    ...json,
+    name: data.title,
+    description: data.description,
+    datePublished: data.published,
+    dateModified: data.last_updated,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+    author: data.contributor
+      ? { '@type': 'Person', name: data.contributor }
+      : { '@type': 'Organization', name: SITE.publisher.name },
+    publisher: { '@type': 'Organization', name: SITE.publisher.name, url: SITE.url },
+    image: data.hero ? new URL(String(data.hero), SITE.url).toString() : undefined,
+    step: Array.isArray(data.steps)
+      ? (data.steps as Array<{ name: string; text: string }>).map((s, i) => ({
+          '@type': 'HowToStep',
+          position: i + 1,
+          name: s.name,
+          text: s.text,
+        }))
+      : undefined,
   };
 } else if (type === 'FAQPage') {
   json = {

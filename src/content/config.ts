@@ -18,7 +18,7 @@ const guides = defineCollection({
       last_updated: ISO_DATE,
       published: ISO_DATE,
       contributor: reference('contributors').optional(),
-      schema_type: z.literal('Article').default('Article'),
+      schema_type: z.enum(['Article', 'HowTo']).default('Article'),
       hero: image().optional(),
       hero_alt: z.string().optional(),
       tags: z.array(z.string()).default([]),

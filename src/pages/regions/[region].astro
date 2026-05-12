@@ -1,0 +1,101 @@
+---
+import Hub from '~/layouts/Hub.astro';
+import DirectoryCard from '~/components/DirectoryCard.astro';
+import { SG_REGIONS } from '~/lib/site';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  return SG_REGIONS.map((region) => ({ params: { region } }));
+}
+
+const { region } = Astro.params;
+const all = await getCollection('directory', ({ data }) => data.region === region && !data.draft);
+
+const byType = {
+  vets: all.filter((e) => e.data.type === 'vets'),
+  groomers: all.filter((e) => e.data.type === 'groomers'),
+  boarding: all.filter((e) => e.data.type === 'boarding'),
+  shops: all.filter((e) => e.data.type === 'shops'),
+  rescues: all.filter((e) => e.data.type === 'rescues'),
+  breeders: all.filter((e) => e.data.type === 'breeders'),
+};
+
+const regionMeta: Record<string, { name: string; intro: string; climate: string; subzones: string }> = {
+  north: {
+    name: 'north Singapore',
+    intro: 'the north covers Yishun, Sembawang, Woodlands, Admiralty, and Mandai. rabbit infrastructure is thinner here than central SG, but exotic vet coverage is growing and a few specialty pet shops have opened near Sembawang and Woodlands MRT.',
+    climate: 'slightly cooler at night than central due to less urban heat island effect, especially in Sembawang and Mandai areas. still subject to standard SG humidity, so AC and hay storage discipline matter the same as everywhere else.',
+    subzones: 'Yishun, Sembawang, Woodlands, Admiralty, Mandai, Sungei Kadut.',
+  },
+  south: {
+    name: 'south Singapore',
+    intro: 'the south covers Bukit Merah, Telok Blangah, Sentosa-adjacent areas, and Tiong Bahru. fewest dedicated rabbit clinics of any region. most south-side owners use vets in central or east SG.',
+    climate: 'coastal, slightly more breeze in some areas. humidity remains high. proximity to Sentosa adds tourist-driven pet-friendly infrastructure but few rabbit-specific options.',
+    subzones: 'Bukit Merah, Telok Blangah, Tiong Bahru, Pasir Panjang, HarbourFront, Sentosa-adjacent.',
+  },
+  east: {
+    name: 'east Singapore',
+    intro: 'the east covers Bedok, Tampines, Pasir Ris, Changi, and Katong. strong exotic vet cluster especially around Bedok and Tampines, popular for rabbit boarding because of the larger residential properties in the Changi area.',
+    climate: 'sea breeze in coastal areas (East Coast, Pasir Ris) helps marginally with afternoon heat. Tampines and Bedok HDB-dense areas are full standard SG humidity.',
+    subzones: 'Bedok, Tampines, Pasir Ris, Changi, Katong, Marine Parade, Joo Chiat, Geylang.',
+  },
+  west: {
+    name: 'west Singapore',
+    intro: 'the west covers Jurong, Clementi, Bukit Batok, Choa Chu Kang, and Tuas. mid-range exotic vet coverage, a few specialty pet shops near Clementi and Jurong East. less expensive boarding options than central.',
+    climate: 'inland areas (Bukit Batok, Choa Chu Kang) can get slightly hotter in afternoons. industrial west (Tuas) is unsuitable for rabbit residency due to air quality, mostly factory zones.',
+    subzones: 'Jurong East, Jurong West, Clementi, Bukit Batok, Choa Chu Kang, Bukit Panjang, Tuas.',
+  },
+  central: {
+    name: 'central Singapore',
+    intro: 'central covers Orchard, Novena, Toa Payoh, Bishan, Bukit Timah, and Marymount. the densest concentration of exotic vets in SG, premium pet shops, and most rabbit-savvy groomers. most expensive area for boarding and vet consults.',
+    climate: 'standard SG urban climate. urban heat island makes peak afternoons hotter, AC discipline is essential.',
+    subzones: 'Orchard, Novena, Toa Payoh, Bishan, Bukit Timah, Marymount, Newton, Tanglin, MacRitchie-adjacent.',
+  },
+};
+
+const meta = regionMeta[region!] ?? regionMeta.central;
+---
+<Hub
+  title={`rabbit care in ${meta.name}`}
+  description={`SG rabbit vets, boarding, groomers, shops, and rescues in ${meta.name}. verified entries with addresses, hours, and contact details.`}
+  intro={meta.intro}
+  parent={{ name: 'by region', href: '/regions/' }}
+>
+  <section class="mb-8 rounded border border-ink/10 bg-accent-soft/40 p-4">
+    <h2 class="font-serif text-lg">about the {region} region</h2>
+    <p class="mt-2 text-sm"><strong>subzones covered:</strong> {meta.subzones}</p>
+    <p class="mt-2 text-sm"><strong>climate notes:</strong> {meta.climate}</p>
+  </section>
+
+  {(['vets', 'groomers', 'boarding', 'shops', 'rescues', 'breeders'] as const).map((t) => {
+    const entries = byType[t];
+    if (entries.length === 0) return null;
+    return (
+      <section class="mb-10">
+        <h2 class="font-serif text-2xl capitalize">{t} in {region}</h2>
+        <div class="mt-4 grid gap-4 sm:grid-cols-2">
+          {entries.map((e) => <DirectoryCard entry={e} />)}
+        </div>
+        <p class="mt-3 text-sm text-ink-soft">
+          see <a href={`/${t}/`}>all {t}</a> or <a href={`/${t}/by-region/${region}/`}>{t} by region browser</a>.
+        </p>
+      </section>
+    );
+  })}
+
+  {all.length === 0 && (
+    <section class="rounded border border-ink/10 bg-white p-6 text-center">
+      <p class="text-sm text-ink-soft">no verified entries in this region yet. our directory is built one verified business at a time — we will not list anything we cannot confirm.</p>
+      <p class="mt-3 text-sm">
+        in the meantime, see our <a href="/vets/">SG-wide vet directory</a> or <a href="/care/">care guides</a>.
+      </p>
+    </section>
+  )}
+
+  <section class="mt-10 rounded border border-ink/10 bg-white p-4">
+    <h2 class="font-serif text-lg">help us grow the {region} listings</h2>
+    <p class="mt-2 text-sm">
+      know a rabbit-friendly vet, shop, groomer, or rescue in {region} Singapore? <a href="/contact/">tell us</a> and we will verify and add them.
+    </p>
+  </section>
+</Hub>
