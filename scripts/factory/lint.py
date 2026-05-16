@@ -59,4 +59,27 @@ def lint_post(content: str, expected_title: str | None = None) -> Tuple[bool, li
     if re.search(r"\b(in conclusion|in summary|overall,)\b", body.lower()):
         errors.append("contains banned phrase (in conclusion / in summary / overall)")
 
+    # MDX safety: import lines break the build (no Callout component exists, tsconfig alias is ~/* not @/*)
+    if re.search(r"(?m)^import\s+", body):
+        errors.append("MDX: contains import statement (no JSX components exist; use markdown only)")
+
+    # MDX safety: bare <digit looks like a JSX tag opener and breaks vite/rollup
+    lt_digit = re.findall(r"<\d", body)
+    if lt_digit:
+        errors.append(f"MDX: bare '<digit' pattern ({len(lt_digit)}x); rewrite as 'under N' or '&lt;N'")
+
+    # MDX safety: JSX-style tags (<Callout>, <Alert>, etc.) — uppercase first letter after <
+    jsx_tags = re.findall(r"<[A-Z][a-zA-Z]*\b", body)
+    if jsx_tags:
+        errors.append(f"MDX: JSX-style tags found ({', '.join(set(jsx_tags))}); use markdown blockquotes")
+
+    # playbook §2: every article must link to /vets/ at least once
+    if not re.search(r"\]\(/vets/?\)", body):
+        errors.append("playbook: no link to /vets/ (required at least once)")
+
+    # playbook §2: ≥3 internal links total
+    internal_links = re.findall(r"\]\(/[a-z][a-z/-]*/?\)", body)
+    if len(internal_links) < 3:
+        errors.append(f"playbook: only {len(internal_links)} internal link(s) (need at least 3)")
+
     return len(errors) == 0, errors

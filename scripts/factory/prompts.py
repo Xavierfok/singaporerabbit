@@ -69,6 +69,28 @@ affiliate_disclosure: false
 - if discussing prices or procedures, frame them as "as of 2026, costs typically range"
 - never name a vet clinic by name unless you are quoting publicly available info
 
+## MDX safety (CRITICAL, build breaks otherwise)
+
+this is .mdx, not plain markdown. the MDX parser treats `<` and `{` as
+JSX syntax. follow these rules exactly:
+
+- NEVER add an `import` line. no `import { Callout } from ...`. no JSX
+  components. components do not exist in this repo. plain markdown only.
+- NEVER write a bare `<` immediately followed by a digit. for "less than
+  50 PSI" write "under 50 PSI" or "below 50 PSI" or escape as `&lt;50`.
+  the parser breaks on `<5` etc.
+- NEVER use JSX-style tags like `<Callout>`, `<Alert>`, `<Card>`. for
+  emphasis or warnings use a markdown blockquote starting with `> **label:**`
+  (e.g. `> **emergency:** call a vet immediately`).
+- NEVER use single curly braces around plain text. `{some value}` is parsed
+  as a JSX expression and will break. use plain text.
+
+## /vets/ link requirement
+
+every article MUST link to `/vets/` at least once. the natural place is
+the related-reading section as a bullet like:
+`- our [vet directory](/vets/) — <one-line topic-specific anchor>`
+
 ## what NOT to do
 
 - do not fabricate businesses, vets, shops, products. if you cite a brand
