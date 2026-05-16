@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# singaporerabbit pre-commit hook.
+# blocks commits that include MDX guide files which fail factory lint.
+# install: bash scripts/install-git-hooks.sh
+set -euo pipefail
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
+
+# only check staged .mdx under src/content/guides/ (portable: macOS bash 3.2)
+STAGED=()
+while IFS= read -r line; do
+  STAGED+=("$line")
+done < <(git diff --cached --name-only --diff-filter=ACM | grep -E '^src/content/guides/.*\.mdx$' || true)
+
+if [ "${#STAGED[@]}" -eq 0 ]; then
+  exit 0
+fi
+
+PYTHON="${PYTHON:-python3}"
+TMP="$(mktemp -d)"
+trap 'rm -rf "$TMP"' EXIT
+
+# write each staged version to tmp, then run lint via Python on the whole list
+for f in "${STAGED[@]}"; do
+  mkdir -p "$TMP/$(dirname "$f")"
+  git show ":$f" > "$TMP/$f"
+done
+
+"$PYTHON" - "$TMP" "${STAGED[@]}" <<'PY'
+import sys
+from pathlib import Path
+sys.path.insert(0, "scripts/factory")
+from lint import lint_post
+
+tmp_root = Path(sys.argv[1])
+files = sys.argv[2:]
+fail = False
+for f in files:
+    body = (tmp_root / f).read_text()
+    ok, errs = lint_post(body)
+    if not ok:
+        fail = True
+        print(f"lint FAILED: {f}")
+        for e in errs:
+            print(f"  - {e}")
+
+if fail:
+    print()
+    print("pre-commit blocked. fix the lint errors above, re-stage, and commit again.")
+    print("to bypass (NOT recommended), use: git commit --no-verify")
+    sys.exit(1)
+PY
