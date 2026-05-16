@@ -21,5 +21,12 @@ git pull --ff-only origin main >> "$LOG" 2>&1
 
 /opt/homebrew/bin/python3 "$ROOT/generate.py" "$@" >> "$LOG" 2>&1
 RC=$?
-echo "exit $RC" >> "$LOG"
+echo "generate exit $RC" >> "$LOG"
+
+# sweep up any orphaned .mdx files left by ad-hoc bulk sessions
+echo "--- orphan sweep ---" >> "$LOG"
+/opt/homebrew/bin/python3 "$ROOT/orphan_sweep.py" >> "$LOG" 2>&1
+SWEEP_RC=$?
+echo "orphan_sweep exit $SWEEP_RC" >> "$LOG"
+
 exit $RC
