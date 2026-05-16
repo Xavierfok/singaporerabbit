@@ -9,23 +9,133 @@
     "behaviour-troubleshooting"
   ],
   "topics": [
-    { "key": "rabbit-pee-blood-emergency", "stream": "care-deep-dives", "title": "blood in rabbit pee, what SG owners should actually do", "status": "queued", "schema_type": "Article" },
-    { "key": "first-aid-kit-rabbit-singapore", "stream": "care-deep-dives", "title": "the SG rabbit first-aid kit, what to actually stock", "status": "queued", "schema_type": "HowTo" },
-    { "key": "rabbit-spaying-cost-singapore", "stream": "vet-comparisons", "title": "rabbit spaying cost in Singapore, 2026 comparison across exotic clinics", "status": "queued", "schema_type": "Article" },
-    { "key": "annual-vet-checkup-rabbit-singapore", "stream": "vet-comparisons", "title": "what an annual rabbit checkup should include in SG", "status": "queued", "schema_type": "Article" },
-    { "key": "best-rabbit-litter-singapore", "stream": "product-reviews", "title": "best rabbit litter in Singapore, paper vs pellet vs hay-based comparison", "status": "queued", "schema_type": "Article" },
-    { "key": "best-rabbit-carrier-vet-trips-singapore", "stream": "product-reviews", "title": "best rabbit carrier for SG vet trips, 2026 picks", "status": "queued", "schema_type": "Article" },
-    { "key": "best-rabbit-cooling-mats-singapore", "stream": "product-reviews", "title": "best rabbit cooling products for SG climate", "status": "queued", "schema_type": "Article" },
-    { "key": "netherland-dwarf-sg-care", "stream": "breed-specific-sg", "title": "Netherland Dwarf care in Singapore, what owners need to know", "status": "queued", "schema_type": "Article" },
-    { "key": "lionhead-rabbit-grooming-sg", "stream": "breed-specific-sg", "title": "Lionhead rabbit grooming in SG humidity, the realistic schedule", "status": "queued", "schema_type": "HowTo" },
-    { "key": "holland-lop-sg-temperament", "stream": "breed-specific-sg", "title": "Holland Lop in SG flats, temperament and care notes", "status": "queued", "schema_type": "Article" },
-    { "key": "rabbit-rex-mini-care-sg", "stream": "breed-specific-sg", "title": "Mini Rex in Singapore, coat care and climate notes", "status": "queued", "schema_type": "Article" },
-    { "key": "rabbit-cny-chinese-new-year-safety", "stream": "seasonal-sg", "title": "rabbit safety during Chinese New Year in Singapore", "status": "queued", "schema_type": "HowTo" },
-    { "key": "rabbit-haze-singapore", "stream": "seasonal-sg", "title": "protecting rabbits during SG haze season", "status": "queued", "schema_type": "HowTo" },
-    { "key": "rabbit-thunderstorm-stress-singapore", "stream": "seasonal-sg", "title": "calming rabbits during SG thunderstorms", "status": "queued", "schema_type": "HowTo" },
-    { "key": "rabbit-overgrooming-singapore", "stream": "behaviour-troubleshooting", "title": "rabbit overgrooming itself or partner, when to intervene", "status": "queued", "schema_type": "Article" },
-    { "key": "rabbit-scared-of-everything-singapore", "stream": "behaviour-troubleshooting", "title": "rabbit scared of every noise, building confidence in HDB flats", "status": "queued", "schema_type": "HowTo" },
-    { "key": "rabbit-not-eating-pellets-only-hay", "stream": "behaviour-troubleshooting", "title": "rabbit refuses pellets but eats hay, troubleshooting", "status": "queued", "schema_type": "Article" },
-    { "key": "introducing-rabbit-to-cat-singapore", "stream": "behaviour-troubleshooting", "title": "introducing a rabbit to a resident cat in SG flats", "status": "queued", "schema_type": "HowTo" }
+    {
+      "key": "rabbit-pee-blood-emergency",
+      "stream": "care-deep-dives",
+      "title": "blood in rabbit pee, what SG owners should actually do",
+      "status": "drafted",
+      "schema_type": "Article",
+      "drafted_at": "2026-05-13",
+      "branch": "auto-drafts/rabbit-pee-blood-emergency"
+    },
+    {
+      "key": "first-aid-kit-rabbit-singapore",
+      "stream": "care-deep-dives",
+      "title": "the SG rabbit first-aid kit, what to actually stock",
+      "status": "queued",
+      "schema_type": "HowTo"
+    },
+    {
+      "key": "rabbit-spaying-cost-singapore",
+      "stream": "vet-comparisons",
+      "title": "rabbit spaying cost in Singapore, 2026 comparison across exotic clinics",
+      "status": "queued",
+      "schema_type": "Article"
+    },
+    {
+      "key": "annual-vet-checkup-rabbit-singapore",
+      "stream": "vet-comparisons",
+      "title": "what an annual rabbit checkup should include in SG",
+      "status": "queued",
+      "schema_type": "Article"
+    },
+    {
+      "key": "best-rabbit-litter-singapore",
+      "stream": "product-reviews",
+      "title": "best rabbit litter in Singapore, paper vs pellet vs hay-based comparison",
+      "status": "queued",
+      "schema_type": "Article"
+    },
+    {
+      "key": "best-rabbit-carrier-vet-trips-singapore",
+      "stream": "product-reviews",
+      "title": "best rabbit carrier for SG vet trips, 2026 picks",
+      "status": "queued",
+      "schema_type": "Article"
+    },
+    {
+      "key": "best-rabbit-cooling-mats-singapore",
+      "stream": "product-reviews",
+      "title": "best rabbit cooling products for SG climate",
+      "status": "queued",
+      "schema_type": "Article"
+    },
+    {
+      "key": "netherland-dwarf-sg-care",
+      "stream": "breed-specific-sg",
+      "title": "Netherland Dwarf care in Singapore, what owners need to know",
+      "status": "queued",
+      "schema_type": "Article"
+    },
+    {
+      "key": "lionhead-rabbit-grooming-sg",
+      "stream": "breed-specific-sg",
+      "title": "Lionhead rabbit grooming in SG humidity, the realistic schedule",
+      "status": "queued",
+      "schema_type": "HowTo"
+    },
+    {
+      "key": "holland-lop-sg-temperament",
+      "stream": "breed-specific-sg",
+      "title": "Holland Lop in SG flats, temperament and care notes",
+      "status": "queued",
+      "schema_type": "Article"
+    },
+    {
+      "key": "rabbit-rex-mini-care-sg",
+      "stream": "breed-specific-sg",
+      "title": "Mini Rex in Singapore, coat care and climate notes",
+      "status": "queued",
+      "schema_type": "Article"
+    },
+    {
+      "key": "rabbit-cny-chinese-new-year-safety",
+      "stream": "seasonal-sg",
+      "title": "rabbit safety during Chinese New Year in Singapore",
+      "status": "queued",
+      "schema_type": "HowTo"
+    },
+    {
+      "key": "rabbit-haze-singapore",
+      "stream": "seasonal-sg",
+      "title": "protecting rabbits during SG haze season",
+      "status": "queued",
+      "schema_type": "HowTo"
+    },
+    {
+      "key": "rabbit-thunderstorm-stress-singapore",
+      "stream": "seasonal-sg",
+      "title": "calming rabbits during SG thunderstorms",
+      "status": "queued",
+      "schema_type": "HowTo"
+    },
+    {
+      "key": "rabbit-overgrooming-singapore",
+      "stream": "behaviour-troubleshooting",
+      "title": "rabbit overgrooming itself or partner, when to intervene",
+      "status": "queued",
+      "schema_type": "Article"
+    },
+    {
+      "key": "rabbit-scared-of-everything-singapore",
+      "stream": "behaviour-troubleshooting",
+      "title": "rabbit scared of every noise, building confidence in HDB flats",
+      "status": "queued",
+      "schema_type": "HowTo"
+    },
+    {
+      "key": "rabbit-not-eating-pellets-only-hay",
+      "stream": "behaviour-troubleshooting",
+      "title": "rabbit refuses pellets but eats hay, troubleshooting",
+      "status": "queued",
+      "schema_type": "Article"
+    },
+    {
+      "key": "introducing-rabbit-to-cat-singapore",
+      "stream": "behaviour-troubleshooting",
+      "title": "introducing a rabbit to a resident cat in SG flats",
+      "status": "queued",
+      "schema_type": "HowTo"
+    }
   ]
 }
