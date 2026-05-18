@@ -71,10 +71,10 @@ affiliate_disclosure: false
 
 ## MDX safety (CRITICAL, build breaks otherwise)
 
-this is .mdx, not plain markdown. the MDX parser treats `<` and `{` as
+this is .mdx, not plain markdown. the MDX parser treats `<` and `{{` as
 JSX syntax. follow these rules exactly:
 
-- NEVER add an `import` line. no `import { Callout } from ...`. no JSX
+- NEVER add an `import` line. no `import {{ Callout }} from ...`. no JSX
   components. components do not exist in this repo. plain markdown only.
 - NEVER write a bare `<` immediately followed by a digit. for "less than
   50 PSI" write "under 50 PSI" or "below 50 PSI" or escape as `&lt;50`.
@@ -82,7 +82,7 @@ JSX syntax. follow these rules exactly:
 - NEVER use JSX-style tags like `<Callout>`, `<Alert>`, `<Card>`. for
   emphasis or warnings use a markdown blockquote starting with `> **label:**`
   (e.g. `> **emergency:** call a vet immediately`).
-- NEVER use single curly braces around plain text. `{some value}` is parsed
+- NEVER use single curly braces around plain text. `{{some value}}` is parsed
   as a JSX expression and will break. use plain text.
 
 ## /vets/ link requirement
