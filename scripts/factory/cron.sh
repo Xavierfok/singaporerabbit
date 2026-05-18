@@ -5,6 +5,7 @@
 #
 # bulk mode: COUNT env var sets articles per run (default 50 for 2026-05-18 ramp)
 # stops once daily target reached; deploys after batch
+# auto-stop: BULK_STOP_DATE freezes the bulk batch after Day 10 (2026-05-27)
 set -u
 export PATH="/opt/homebrew/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 unset ANTHROPIC_API_KEY
@@ -13,9 +14,31 @@ unset CLAUDE_API_KEY
 ROOT="/Users/foktunghoe/Desktop/singaporerabbits/scripts/factory"
 REPO="/Users/foktunghoe/Desktop/singaporerabbits"
 LOG="$ROOT/logs/cron.log"
+LOCK="$ROOT/cron.lock"
+BULK_STOP_DATE="2026-05-27"  # bulk batch stops AFTER this date (Day 10 = 2026-05-27 inclusive)
 mkdir -p "$ROOT/logs"
 
 COUNT="${COUNT:-50}"
+
+# auto-stop after bulk ramp window
+TODAY=$(date +%Y-%m-%d)
+if [ "$TODAY" \> "$BULK_STOP_DATE" ]; then
+  echo "===== $(date -Iseconds) bulk window closed (>$BULK_STOP_DATE), reverting to count=4 =====" >> "$LOG"
+  COUNT=4  # post-ramp BAU cadence
+fi
+
+# single-instance lock (prevents launchd-Day2 collision with manual Day1 still running)
+if [ -f "$LOCK" ]; then
+  OLD_PID=$(cat "$LOCK" 2>/dev/null || echo "")
+  if [ -n "$OLD_PID" ] && kill -0 "$OLD_PID" 2>/dev/null; then
+    echo "===== $(date -Iseconds) another cron.sh is running (pid $OLD_PID), exiting =====" >> "$LOG"
+    exit 0
+  fi
+  # stale lock, remove
+  rm -f "$LOCK"
+fi
+echo "$$" > "$LOCK"
+trap 'rm -f "$LOCK"' EXIT
 
 echo "===== $(date -Iseconds) (count=$COUNT) =====" >> "$LOG"
 cd "$REPO" || exit 1
