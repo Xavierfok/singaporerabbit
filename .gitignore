@@ -40,3 +40,5 @@ fb_scrape/
 competitor_scrape/
 research_scrape/
 scripts/factory/cron.lock
+scripts/factory/auto_publish.lock
+scripts/factory/.last-deployed-sha
