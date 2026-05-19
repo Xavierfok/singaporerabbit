@@ -30,6 +30,7 @@ sys.path.insert(0, str(ROOT))
 
 from claude_call import ask_claude  # noqa: E402
 from lint import lint_post  # noqa: E402
+from mdx_safety import run_all as mdx_safety_pass  # noqa: E402
 from prompts import build_generation_prompt, build_humanizer_prompt  # noqa: E402
 
 QUEUE_PATH = ROOT / "queue.json"
@@ -90,6 +91,9 @@ def process_one(topic: dict, queue: dict, today: str, bulk: bool, dry_run: bool)
     if not final:
         log("humanizer FAILED, using raw draft")
         final = draft
+
+    # deterministic post-pass: quote YAML colons, strip em-dashes, escape <digit, strip single {}
+    final = mdx_safety_pass(final)
 
     ok, errors = lint_post(final, expected_title=topic["title"])
     if not ok:
