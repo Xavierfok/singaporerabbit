@@ -15,17 +15,12 @@ ROOT="/Users/foktunghoe/Desktop/singaporerabbits/scripts/factory"
 REPO="/Users/foktunghoe/Desktop/singaporerabbits"
 LOG="$ROOT/logs/cron.log"
 LOCK="$ROOT/cron.lock"
-BULK_STOP_DATE="2026-05-27"  # bulk batch stops AFTER this date (Day 10 = 2026-05-27 inclusive)
 mkdir -p "$ROOT/logs"
 
-COUNT="${COUNT:-50}"
-
-# auto-stop after bulk ramp window
-TODAY=$(date +%Y-%m-%d)
-if [ "$TODAY" \> "$BULK_STOP_DATE" ]; then
-  echo "===== $(date -Iseconds) bulk window closed (>$BULK_STOP_DATE), reverting to count=4 =====" >> "$LOG"
-  COUNT=4  # post-ramp BAU cadence
-fi
+# drain-the-queue mode: generate.py exits early when no queued topics remain.
+# at 5 min/article serial, ~58hr to drain 700-topic queue. lock prevents
+# launchd-Day2 collisions; if manual run finishes, daily 10am picks up rest.
+COUNT="${COUNT:-700}"
 
 # single-instance lock (prevents launchd-Day2 collision with manual Day1 still running)
 if [ -f "$LOCK" ]; then
