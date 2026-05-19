@@ -43,8 +43,8 @@ git fetch origin >> "$LOG" 2>&1
 git checkout main >> "$LOG" 2>&1
 git pull --ff-only origin main >> "$LOG" 2>&1
 
-# bulk generation
-/opt/homebrew/bin/python3 "$ROOT/generate.py" --count "$COUNT" "$@" >> "$LOG" 2>&1
+# bulk generation — humanizer skipped because mdx_safety post-pass is deterministic
+/opt/homebrew/bin/python3 "$ROOT/generate.py" --count "$COUNT" --skip-humanize "$@" >> "$LOG" 2>&1
 RC=$?
 echo "generate exit $RC" >> "$LOG"
 

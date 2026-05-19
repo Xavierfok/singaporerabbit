@@ -75,7 +75,7 @@ def notify(msg: str, title: str = "rabbits factory") -> None:
     subprocess.run([str(notifier), msg, title], check=False)
 
 
-def process_one(topic: dict, queue: dict, today: str, bulk: bool, dry_run: bool) -> int:
+def process_one(topic: dict, queue: dict, today: str, bulk: bool, dry_run: bool, skip_humanize: bool = False) -> int:
     """generate, humanize, lint, write, commit one topic. returns 0 on success."""
     log(f"picked {topic['key']} (stream={topic['stream']})")
 
@@ -86,13 +86,16 @@ def process_one(topic: dict, queue: dict, today: str, bulk: bool, dry_run: bool)
         notify(f"{topic['key']}: generation failed", "rabbits factory")
         return 2
 
-    hum_prompt = build_humanizer_prompt(draft)
-    final = ask_claude(hum_prompt, model="sonnet", timeout=600)
-    if not final:
-        log("humanizer FAILED, using raw draft")
+    if skip_humanize:
         final = draft
+    else:
+        hum_prompt = build_humanizer_prompt(draft)
+        final = ask_claude(hum_prompt, model="sonnet", timeout=600)
+        if not final:
+            log("humanizer FAILED, using raw draft")
+            final = draft
 
-    # deterministic post-pass: quote YAML colons, strip em-dashes, escape <digit, strip single {}
+    # deterministic post-pass: strip preamble, quote YAML, em-dashes, AI filler, <digit, {x}
     final = mdx_safety_pass(final)
 
     ok, errors = lint_post(final, expected_title=topic["title"])
@@ -158,6 +161,7 @@ def main() -> int:
     ap.add_argument("--key")
     ap.add_argument("--count", type=int, default=1)
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--skip-humanize", action="store_true", help="skip 2nd Claude call; mdx_safety handles the cleanup")
     args = ap.parse_args()
 
     bulk = args.count > 1 and BULK_AUTO_MERGE
@@ -175,7 +179,7 @@ def main() -> int:
             break
 
         log(f"=== batch {i + 1}/{args.count}: {topic['key']} ===")
-        result = process_one(topic, queue, today, bulk, args.dry_run)
+        result = process_one(topic, queue, today, bulk, args.dry_run, args.skip_humanize)
         if result == 0:
             success += 1
         else:

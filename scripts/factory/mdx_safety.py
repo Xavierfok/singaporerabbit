@@ -92,6 +92,30 @@ def fix_mdx_single_braces(text: str) -> str:
     return f"{pre}---{fm}---{body}"
 
 
+_FILLER_PATTERNS = [
+    (re.compile(r"\b(in conclusion|in summary|to summarize|to conclude|overall),?\s*", re.IGNORECASE), ""),
+    (re.compile(r"\b(various|numerous|a multitude of|a plethora of)\b", re.IGNORECASE), "several"),
+    (re.compile(r"\bit's worth noting that\b", re.IGNORECASE), ""),
+    (re.compile(r"\bit is important to note that\b", re.IGNORECASE), ""),
+    (re.compile(r"\bplays a (?:crucial|vital|key|important) role\b", re.IGNORECASE), "matters"),
+    (re.compile(r"\b(?:firstly|secondly|thirdly|moreover|furthermore|additionally)\b,?\s*", re.IGNORECASE), ""),
+]
+
+
+def strip_ai_filler_body(text: str) -> str:
+    """remove common AI-writing tells from body. preserves frontmatter."""
+    parts = text.split("---", 2)
+    if len(parts) < 3:
+        return text
+    pre, fm, body = parts[0], parts[1], parts[2]
+    for pat, repl in _FILLER_PATTERNS:
+        body = pat.sub(repl, body)
+    # collapse double spaces + double commas
+    body = re.sub(r"  +", " ", body)
+    body = re.sub(r",\s*,", ",", body)
+    return f"{pre}---{fm}---{body}"
+
+
 def strip_preamble_before_frontmatter(text: str) -> str:
     """if any text precedes the first `---`, strip it. fixes humanizer dropping opener."""
     text = text.lstrip()
@@ -110,6 +134,7 @@ def run_all(text: str) -> str:
     text = strip_preamble_before_frontmatter(text)
     text = quote_yaml_fields(text)
     text = strip_em_dashes_body(text)
+    text = strip_ai_filler_body(text)
     text = fix_mdx_lt_digit(text)
     text = fix_mdx_single_braces(text)
     return text
