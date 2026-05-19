@@ -92,8 +92,22 @@ def fix_mdx_single_braces(text: str) -> str:
     return f"{pre}---{fm}---{body}"
 
 
+def strip_preamble_before_frontmatter(text: str) -> str:
+    """if any text precedes the first `---`, strip it. fixes humanizer dropping opener."""
+    text = text.lstrip()
+    if text.startswith("---"):
+        return text
+    # find the first standalone `---` line
+    idx = text.find("\n---")
+    if idx == -1:
+        return text
+    # cut everything before that, keeping the `---`
+    return text[idx + 1:]
+
+
 def run_all(text: str) -> str:
     """run all safety passes in order. frontmatter -> body."""
+    text = strip_preamble_before_frontmatter(text)
     text = quote_yaml_fields(text)
     text = strip_em_dashes_body(text)
     text = fix_mdx_lt_digit(text)

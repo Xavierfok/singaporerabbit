@@ -39,3 +39,4 @@ __pycache__/
 fb_scrape/
 competitor_scrape/
 research_scrape/
+scripts/factory/cron.lock
