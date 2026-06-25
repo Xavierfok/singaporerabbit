@@ -1,0 +1,75 @@
+---
+// floating telegram contact bubble — links to xavierfok on telegram with a
+// prepared message naming this site, so inbound messages are tagged by source.
+const msg = encodeURIComponent("Hi Xavier, I'm reaching out from singaporerabbit.com");
+---
+<a
+  href={`https://t.me/xavierfok?text=${msg}`}
+  target="_blank"
+  rel="noopener"
+  aria-label="message Xavier on Telegram"
+  class="xftg-bubble"
+>
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z" />
+  </svg>
+  <span class="xftg-tip">message me on telegram</span>
+</a>
+<style>
+  .xftg-bubble {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #dc2626;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(220, 38, 38, 0.45), 0 2px 6px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    text-decoration: none;
+  }
+  .xftg-bubble:hover {
+    transform: translateY(-2px) scale(1.05);
+    background: #b91c1c;
+    box-shadow: 0 12px 28px rgba(185, 28, 28, 0.55), 0 3px 8px rgba(0, 0, 0, 0.25);
+  }
+  .xftg-bubble svg { width: 28px; height: 28px; margin-left: -2px; }
+  .xftg-tip {
+    position: absolute;
+    right: 68px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #111827;
+    color: #f9fafb;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+  }
+  .xftg-bubble:hover .xftg-tip { opacity: 1; }
+  .xftg-bubble::before {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 2px solid rgba(220, 38, 38, 0.4);
+    animation: xftg-pulse 2.2s ease-out infinite;
+  }
+  @keyframes xftg-pulse {
+    0%   { transform: scale(0.85); opacity: 0.8; }
+    100% { transform: scale(1.4);  opacity: 0;   }
+  }
+  @media (max-width: 640px) {
+    .xftg-bubble { right: 14px; bottom: 14px; width: 52px; height: 52px; }
+    .xftg-tip { display: none; }
+  }
+</style>
